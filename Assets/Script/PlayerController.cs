@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Spaceキーが押されている間はJumpする
-        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rigidbody.velocity.y) < 0.01f)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Space key was pressed.");
             rigidbody.AddForce(0, 20*jumpPower, 0);
