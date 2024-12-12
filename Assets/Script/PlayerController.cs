@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     // speedを制御する
     public float speed = 10;
+    public float jumpPower = 10;
     private PhysicMaterial physicMaterial;
     private new Rigidbody rigidbody;
     float dynamicFriction_base;
@@ -27,7 +29,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Debug.Log("Friction = " + physicMaterial.dynamicFriction);
+        // 現在のシーン番号を取得
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        if (rigidbody.position.y < -50)
+        {
+            // 現在のシーンを再読込する
+            SceneManager.LoadScene(sceneIndex);
+        }
         
     }
 
@@ -37,15 +46,11 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         // Debug.Log("x = " + x + ", z = " + z);
-
-
-        // rigidbodyのx軸（横）とz軸（奥）に力を加える
-        rigidbody.AddForce(x * speed, 0, z * speed);
         
-        // Spaceキーが押されている間はブレーキをかける
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Bキーが押されている間はブレーキをかける
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            Debug.Log("Space key was pressed.");
+            Debug.Log("B key was pressed.");
             rigidbody.mass = mass_base * 100.0f;
             rigidbody.drag = 50.0f;
             physicMaterial.dynamicFriction = 1.0f;
@@ -59,5 +64,16 @@ public class PlayerController : MonoBehaviour
             rigidbody.mass = mass_base;
             rigidbody.drag = drag_base;
         }
+
+        // Spaceキーが押されている間はJumpする
+        if (Input.GetKeyDown(KeyCode.Space) && Mathf.Abs(rigidbody.velocity.y) < 0.01f)
+        {
+            Debug.Log("Space key was pressed.");
+            rigidbody.AddForce(0, 20*jumpPower, 0);
+        }
+
+        // rigidbodyのx軸（横）とz軸（奥）に力を加える
+        rigidbody.AddForce(x * speed, 0, z * speed);
+
     }
 }
