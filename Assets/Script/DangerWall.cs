@@ -8,7 +8,7 @@ public class DangerWall : MonoBehaviour
     // オブジェクトと接触した時に呼ばれるコールバック
     void OnCollisionEnter(Collision hit)
     {
-        // 接触対象はPlayerタグですか？
+        // 接触対象はPlayerタグか
         if (hit.gameObject.CompareTag("Player"))
         {
             // 現在のシーン番号を取得
