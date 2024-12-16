@@ -4,17 +4,36 @@ using UnityEngine;
 
 public class Navigater : MonoBehaviour
 {
-    public Transform target; // ターゲットへの参照
+    private Transform target; // ターゲットへの参照
     public Transform player; // プレイヤーへの参照
     private Transform my_transform; // 自分自身のTransform
+    // Item_holder tagを持つオブジェクトを格納する配列
+    private GameObject[] items;
 
     void Start()
     {
-        my_transform = this.transform;
+        my_transform = this.transform;        
     }
 
     void Update()
     {
+        // Item tagを持つオブジェクトのうち、プレイヤーから最も近いオブジェクトをtargetに設定
+        items = GameObject.FindGameObjectsWithTag("Item");
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (i == 0)
+            {
+                target = items[i].transform;
+            }
+            else
+            {
+                if (Vector3.Distance(player.position, items[i].transform.position) < Vector3.Distance(player.position, target.position))
+                {
+                    target = items[i].transform;
+                }
+            }
+        }
+
         // playerからtargetへの方向ベクトルを計算
         Vector3 direction = target.position - player.position;
         
