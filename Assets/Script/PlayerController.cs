@@ -59,20 +59,22 @@ public class PlayerController : MonoBehaviour
             rigidbody.drag = drag_base;
             Debug.Log("Space key was pressed." + ", onGround = " + onGround + ", Mass = " + rigidbody.mass + ", Drag = " + rigidbody.drag);
             // 自身にかかっている力をリセット
-            rigidbody.velocity = Vector3.zero;
+            Vector3 now_velocity = rigidbody.velocity;
+            now_velocity.y = 0.0f;
+            rigidbody.velocity = now_velocity;
             rigidbody.AddForce(0, jumpPower, 0);
             onGround = false;
         }
-        else if (Input.GetKeyDown(KeyCode.B))
+        else if (Input.GetKeyDown(KeyCode.B) && onGround)
         {
             // Bキーが押されている間はブレーキをかける
             Debug.Log("B key was pressed.");
             rigidbody.mass = mass_base * 100.0f;
             rigidbody.drag = 50.0f;
             physicMaterial.dynamicFriction = 1.0f;
-            // brake_power = -1.0f * rigidbody.mass * physicMaterial.dynamicFriction;
-            brake_power = -1.0f * rigidbody.velocity.magnitude;
-            rigidbody.AddForce(brake_power * speed, 0, brake_power * speed);
+            brake_power = 10.0f * rigidbody.mass * physicMaterial.dynamicFriction;
+            Vector3 brake_direction = -1.0f * rigidbody.velocity;
+            rigidbody.AddForce(brake_power * speed * brake_direction.x, 0, brake_power * speed * brake_direction.z);
             Debug.Log("Friction = " + physicMaterial.dynamicFriction + ", Mass = " + rigidbody.mass + ", Drag = " + rigidbody.drag);
         }
         else

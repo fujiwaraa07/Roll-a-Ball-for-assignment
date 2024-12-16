@@ -6,7 +6,6 @@ public class GameController : MonoBehaviour
 {
     public UnityEngine.UI.Text scoreLabel;
     public GameObject winnerLabelObject;
-
     private int maxItemCount;
 
     // Start is called before the first frame update
